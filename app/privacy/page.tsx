@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Privacy | HEIGHT MILLION",
@@ -7,7 +6,7 @@ export const metadata: Metadata = {
 export default function Privacy() {
   return (
     <main className="document">
-      <Link href="/">Back to HEIGHT MILLION</Link>
+      <a href="/">Back to HEIGHT MILLION</a>
       <h1>
         Just blocks.
         <br />

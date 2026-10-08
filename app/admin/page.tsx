@@ -6,7 +6,6 @@ import {
   TableHead,
   TableCell,
 } from "@/components/ui/table";
-import Link from "next/link";
 import type { Metadata } from "next";
 import { isOwner } from "@/lib/owner";
 import { getDatabase } from "@/db";
@@ -79,7 +78,7 @@ export default async function Admin() {
   if (!analytics)
     return (
       <main className="document">
-        <Link href="/">Back to countdown</Link>
+        <a href="/">Back to countdown</a>
         <h1>Analytics temporarily unavailable</h1>
         <p>
           The countdown is still running. Reload this dashboard in a moment to
@@ -92,7 +91,7 @@ export default async function Admin() {
   const max = Math.max(1, ...daily.results.map((row) => row.views));
   return (
     <main className="document">
-      <Link href="/">HEIGHT MILLION / COUNTDOWN</Link>
+      <a href="/">HEIGHT MILLION / COUNTDOWN</a>
       <h1>Behind the countdown.</h1>
       <p>
         Last 30 UTC days · Owner-only analytics · <a href="/admin">Refresh</a>

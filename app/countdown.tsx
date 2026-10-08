@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
@@ -300,12 +299,12 @@ export default function Countdown() {
         Skip to countdown
       </a>
       <header className="header shell">
-        <Link className="brand" href="/" aria-label="Height Million home">
+        <a className="brand" href="/" aria-label="Height Million home">
           <Image unoptimized src="/favicon.svg" width="32" height="32" alt="" />
           <span>
             HEIGHT<span className="brand-light">MILLION</span>
           </span>
-        </Link>
+        </a>
         <nav aria-label="Main navigation">
           <a href="#the-journey">The journey</a>
           <a href="#block-parties">Block parties</a>
@@ -740,12 +739,12 @@ export default function Countdown() {
         </section>
       </main>
       <footer className="footer shell">
-        <Link className="brand" href="/">
+        <a className="brand" href="/">
           <Image unoptimized src="/favicon.svg" width="26" height="26" alt="" />
           <span>
             HEIGHT<span className="brand-light">MILLION</span>
           </span>
-        </Link>
+        </a>
         <p>Built for the next block. Open source. Always.</p>
         <div>
           <a
