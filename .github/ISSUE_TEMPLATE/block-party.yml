@@ -1,0 +1,27 @@
+name: Submit a million-block gathering
+description: Suggest a real event for the HEIGHT MILLION community listings.
+title: "Block party: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: "We list organizer-published events after review. Never post private attendee details. A calendar date is not a guaranteed mining date."
+  - type: input
+    id: event
+    attributes:
+      label: Event name and city
+    validations:
+      required: true
+  - type: input
+    id: organizer
+    attributes:
+      label: Official organizer or event page (HTTPS)
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Public event details
+      description: "Date and timezone, venue or venue status, organizer, and how the event relates to block 1,000,000."
+    validations:
+      required: true
