@@ -1,0 +1,63 @@
+.rolling-number {
+  display: inline-flex;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  line-height: 1.08;
+  white-space: nowrap;
+}
+
+.rolling-number__visual {
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.rolling-number__slot {
+  display: inline-block;
+  position: relative;
+  flex: 0 0 1ch;
+  inline-size: 1ch;
+  block-size: 1.08em;
+  overflow: hidden;
+  contain: paint;
+}
+
+.rolling-number__reel {
+  display: flex;
+  flex-direction: column;
+  inline-size: 100%;
+  transform: translateY(var(--rolling-to));
+}
+
+.rolling-number__reel--changed {
+  animation: rolling-number-turn var(--rolling-duration, 540ms)
+    cubic-bezier(0.16, 0.82, 0.22, 1) both;
+}
+
+.rolling-number__digit {
+  display: block;
+  flex: 0 0 auto;
+  block-size: 1.08em;
+  line-height: 1.08;
+  text-align: center;
+}
+
+.rolling-number__separator {
+  display: inline-block;
+  line-height: 1.08;
+  white-space: pre;
+}
+
+@keyframes rolling-number-turn {
+  from {
+    transform: translateY(var(--rolling-from));
+  }
+  to {
+    transform: translateY(var(--rolling-to));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rolling-number__reel--changed {
+    animation: none;
+  }
+}

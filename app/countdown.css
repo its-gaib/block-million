@@ -1,0 +1,51 @@
+/* The estimate and remaining blocks are the page's primary information. */
+.mission .mission-heading { display:flex; justify-content:space-between; align-items:center; gap:20px; margin:4px 0 28px; }
+.mission h1 { font:500 19px/1.5 Arial, sans-serif; letter-spacing:-.3px; margin:0; white-space:normal; color:#b6b7b3; }
+.mission h1 span { color:var(--foreground); font-weight:700; }
+.feed-status { flex-shrink:0; font:11px/1.5 monospace; color:#959a96; }
+.feed-warning { color:#ffc185; }
+.clock-description { font:12px/1.5 monospace; color:#b1b3ad; margin-bottom:13px; letter-spacing:1.1px; text-transform:uppercase; }
+.mission .clock { display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:12px; align-items:stretch; }
+.mission .time-unit { display:flex; align-items:center; justify-content:center; padding:15px 8px 18px; gap:7px; min-width:0; background:linear-gradient(180deg,#1b1d1f,#121415); border:1px solid #333638; border-radius:5px; box-shadow:0 5px 0 #060707, inset 0 1px #ffffff06; }
+.mission .time-unit:before { content:""; position:absolute; inset:47% 0 auto; border-top:1px solid #0007; pointer-events:none; z-index:2; }
+.mission .time-unit:after { content:none; }
+.mission .time-number { font:600 clamp(58px,11.8vw,156px)/1.12 monospace; letter-spacing:-.045em; color:#f2f0e8; }
+.mission .time-label { font:11px/1.5 monospace; letter-spacing:2px; margin:0; color:#9da39f; }
+.mission .time-unit:last-child .time-number { color:var(--orange); }
+.countdown-summary { display:flex; justify-content:space-between; align-items:center; gap:25px; padding:29px 0 33px; }
+.mission .remaining { flex-direction:row; align-items:baseline; gap:18px; }
+.mission .remaining-number { font:550 clamp(38px,5.8vw,76px)/1.1 monospace; letter-spacing:-.045em; color:var(--orange); }
+.mission .remaining > span:last-child { font:14px/1.4 monospace; letter-spacing:0; color:#bec0ba; }
+.mission .arrival { border:0; padding:0; gap:2px; text-align:right; }
+.mission .arrival strong { font-size:30px; font-weight:600; }
+.mission .arrival .label { font-size:10px; }
+.mission .arrival > span:last-child { font-size:11px; }
+.network-stats strong .rolling-number, .network-stats strong .rolling-number span { font-size:inherit; color:inherit; }
+.journey.content-section { padding-top:65px; }
+.content-section h2 { font-size:32px; letter-spacing:-1px; }
+.journey .timeline { margin-top:38px; }
+.faq-section { padding-bottom:70px; }
+@media (max-width:1100px) {
+  .mission .time-number { font-size:11.5vw; }
+  .mission .remaining { gap:12px; }
+  .mission .remaining-number { font-size:6vw; }
+}
+@media (max-width:760px) {
+  .mission .mission-heading { display:block; margin:0 0 23px; }
+  .mission h1 { font-size:16px; }
+  .feed-status { display:block; margin-top:4px; font-size:10px; }
+  .clock-description { font-size:10px; margin-bottom:10px; }
+  .mission .clock { gap:6px; }
+  .mission .time-unit { padding:12px 2px 11px; gap:5px; border-radius:3px; }
+  .mission .time-number { font-size:11.7vw; letter-spacing:-.075em; }
+  .mission .time-label { font-size:8px; letter-spacing:1px; }
+  .countdown-summary { align-items:flex-start; flex-direction:column; gap:18px; padding:25px 0; }
+  .mission .remaining { gap:12px; flex-direction:row; align-items:center; }
+  .mission .remaining-number { font-size:clamp(30px,8.5vw,56px); }
+  .mission .remaining > span:last-child { font-size:13px; }
+  .mission .arrival { text-align:left; border-top:1px solid var(--line); width:100%; padding-top:16px; }
+  .mission .arrival strong { font-size:25px; }
+  .content-section h2 { font-size:27px; }
+  .stage-heading > span { font-size:10px; }
+}
+@media (prefers-reduced-motion:reduce) { .mission .time-unit { scroll-behavior:auto; } }

@@ -1,24 +1,24 @@
 import type { Metadata } from "next";
 import "./globals.css";
-const origin = "https://heightmillion.pages.dev";
+const origin = "https://blockmillion.pages.dev";
 export const metadata: Metadata = {
   metadataBase: new URL(origin),
-  title: "Bitcoin Block 1,000,000 Countdown | HEIGHT MILLION",
+  title: "Bitcoin Block 1,000,000 Countdown | BLOCK MILLION",
   description:
     "The live countdown to Bitcoin block 1,000,000. Watch new blocks land, track the blocks and estimated time remaining, and find your million-block party.",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "HEIGHT MILLION — One chain. One million blocks.",
+    title: "Bitcoin Block 1,000,000 Countdown | BLOCK MILLION",
     description:
-      "The live Bitcoin block 1,000,000 countdown. Every block brings us closer.",
+      "Time and blocks remaining until Bitcoin block 1,000,000, with network statistics, charts, and community events.",
     type: "website",
     url: origin,
-    siteName: "HEIGHT MILLION",
+    siteName: "BLOCK MILLION",
   },
   twitter: {
     card: "summary",
-    title: "HEIGHT MILLION — Bitcoin Block 1,000,000",
-    description: "Every block brings us closer. Join the countdown.",
+    title: "BLOCK MILLION — Bitcoin Block 1,000,000",
+    description: "Track time and blocks remaining until Bitcoin block 1,000,000.",
   },
   robots: { index: true, follow: true },
   icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },

@@ -11,7 +11,7 @@ import { isOwner } from "@/lib/owner";
 import { getDatabase } from "@/db";
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
-  title: "Private analytics | HEIGHT MILLION",
+  title: "Private analytics | BLOCK MILLION",
   robots: { index: false, follow: false },
   alternates: { canonical: "/admin" },
 };
@@ -91,7 +91,7 @@ export default async function Admin() {
   const max = Math.max(1, ...daily.results.map((row) => row.views));
   return (
     <main className="document">
-      <a href="/">HEIGHT MILLION / COUNTDOWN</a>
+      <a href="/">BLOCK MILLION / COUNTDOWN</a>
       <h1>Behind the countdown.</h1>
       <p>
         Last 30 UTC days · Owner-only analytics · <a href="/admin">Refresh</a>

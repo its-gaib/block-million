@@ -24,7 +24,7 @@ const sourceCommit =
   gitHead.status === 0 && gitStatus.status === 0 && !gitStatus.stdout.trim()
     ? gitHead.stdout.trim()
     : null;
-const staging = await mkdtemp(path.join(tmpdir(), "heightmillion-pages-"));
+const staging = await mkdtemp(path.join(tmpdir(), "blockmillion-pages-"));
 const publicDir = path.join(staging, "public");
 await cp(path.join(root, "dist/client"), publicDir, { recursive: true });
 const workerDir = path.join(publicDir, "_worker.js");

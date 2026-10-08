@@ -4,10 +4,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Share2,
   MapPin,
-  Copy,
   Expand,
   Code,
-  Radio,
   RotateCcw,
   Volume2,
   VolumeX,
@@ -31,9 +29,14 @@ import {
   subsidy,
 } from "@/lib/bitcoin";
 import { track } from "@/lib/track";
+import { RollingNumber } from "@/components/rolling-number";
+import { NetworkCharts } from "@/components/network-charts";
+import type { NetworkSnapshot } from "@/lib/network";
+import "@/components/rolling-number.css";
+import "./countdown.css";
 const fmt = (n: number) => n.toLocaleString("en-US");
 const pad = (n: number) => String(n).padStart(2, "0");
-const repo = "https://github.com/its-gaib/height-million";
+const repo = "https://github.com/its-gaib/block-million";
 const faq = [
   [
     "When will Bitcoin reach block 1,000,000?",
@@ -49,7 +52,7 @@ const faq = [
   ],
   [
     "Where does the live data come from?",
-    "We read the active Bitcoin chain from mempool.space, with Blockstream as a fallback. The site checks every 30 seconds while visible. If fresh data is unavailable, we keep the last known values and clearly label them. The block-drop preview never changes real data.",
+    "We read the active Bitcoin chain from mempool.space, with Blockstream as a fallback. The site checks every 30 seconds while visible. If fresh data is unavailable, we keep the last known values and clearly label them. Network statistics come from mempool.space; the transaction backlog can fall back to Blockstream. Network data is refreshed every minute, with hashrate history cached for 10 minutes. The block-drop preview never changes real data.",
   ],
 ];
 function Cube({
@@ -91,6 +94,7 @@ function Cube({
 }
 export default function Countdown() {
   const [snapshot, setSnapshot] = useState<ChainSnapshot | null>(null);
+  const [network, setNetwork] = useState<NetworkSnapshot | null>(null);
   const [now, setNow] = useState<number | null>(null);
   const [status, setStatus] = useState<
     "connecting" | "live" | "stale" | "offline"
@@ -207,6 +211,38 @@ export default function Countdown() {
     };
   }, [refresh]);
   useEffect(() => {
+    let active = true;
+    let loading = false;
+    const controller = new AbortController();
+    async function refreshNetwork() {
+      if (loading || document.hidden) return;
+      loading = true;
+      try {
+        const response = await fetch("/api/network", {
+          cache: "no-store",
+          signal: AbortSignal.any([controller.signal, AbortSignal.timeout(18000)]),
+        });
+        if (!response.ok) throw new Error("Network statistics unavailable");
+        const next: NetworkSnapshot = await response.json();
+        if (active) setNetwork(next);
+      } catch {
+        // Keep each resource's original timestamp so the dashboard marks it stale.
+      } finally {
+        loading = false;
+      }
+    }
+    void refreshNetwork();
+    const poll = setInterval(() => void refreshNetwork(), 60000);
+    const visible = () => { if (!document.hidden) void refreshNetwork(); };
+    document.addEventListener("visibilitychange", visible);
+    return () => {
+      active = false;
+      controller.abort();
+      clearInterval(poll);
+      document.removeEventListener("visibilitychange", visible);
+    };
+  }, []);
+  useEffect(() => {
     if (!announcement) return;
     const t = setTimeout(() => setAnnouncement(""), 9000);
     return () => clearTimeout(t);
@@ -246,19 +282,19 @@ export default function Countdown() {
       : null;
   async function share() {
     const data = {
-      title: "HEIGHT MILLION",
+      title: "BLOCK MILLION",
       text: arrived
-        ? "Bitcoin reached block 1,000,000. One chain. A million blocks. Be part of it."
+        ? "Bitcoin reached block 1,000,000."
         : remaining === null
-          ? "One chain. One million blocks. Join the Bitcoin countdown."
-          : `${fmt(remaining)} blocks to Bitcoin block 1,000,000. Every block brings us closer.`,
+          ? "Track the time and blocks remaining until Bitcoin block 1,000,000."
+          : `${fmt(remaining)} blocks to Bitcoin block 1,000,000.`,
       url: location.origin,
     };
     try {
       if (navigator.share) await navigator.share(data);
       else {
         await navigator.clipboard.writeText(`${data.text} ${data.url}`);
-        toast("Countdown link copied. Send it to your people.");
+        toast("Countdown link copied.");
       }
       track("share");
     } catch (error) {
@@ -281,16 +317,11 @@ export default function Countdown() {
     soundRef.current = next;
     setSound(next);
   }
-  const liveLabel =
-    status === "live" && snapshot && now && now - snapshot.fetchedAt <= 90000
-      ? age !== null && age >= 120
-        ? "FEED CHECKED · WAITING FOR A BLOCK"
-        : "MAINNET · LIVE"
-      : status === "connecting"
-        ? "CONNECTING TO MAINNET"
-        : status === "offline"
-          ? "CONNECTION UNAVAILABLE"
-          : "LAST KNOWN DATA";
+  const feedStale = status === "stale" || !!(snapshot && now && now - snapshot.fetchedAt > 90000);
+  const feedLabel = status === "offline" ? "Connection unavailable"
+    : status === "connecting" ? "Fetching current block…"
+    : feedStale ? "Showing last known block"
+    : `Checked ${Math.max(0, Math.floor(((now ?? snapshot!.fetchedAt) - snapshot!.fetchedAt) / 1000))}s ago`;
   return (
     <div
       className={`site ${watch ? "watch-mode" : ""} ${arrived ? "million-reached" : ""}`}
@@ -299,14 +330,14 @@ export default function Countdown() {
         Skip to countdown
       </a>
       <header className="header shell">
-        <a className="brand" href="/" aria-label="Height Million home">
+        <a className="brand" href="/" aria-label="Block Million home">
           <Image unoptimized src="/favicon.svg" width="32" height="32" alt="" />
           <span>
-            HEIGHT<span className="brand-light">MILLION</span>
+            BLOCK<span className="brand-light">MILLION</span>
           </span>
         </a>
         <nav aria-label="Main navigation">
-          <a href="#the-journey">The journey</a>
+          <a href="#network">Network statistics</a>
           <a href="#block-parties">Block parties</a>
           <a
             href={repo}
@@ -327,80 +358,36 @@ export default function Countdown() {
           id="countdown"
           aria-labelledby="main-title"
         >
-          <div className="mission-top">
-            <span
-              className={`live-status ${liveLabel.includes("LIVE") ? "is-live" : ""}`}
-            >
-              <span />
-              {liveLabel}
-            </span>
-            <span className="mission-code">
-              EST. 2009 &nbsp; / &nbsp; NEVER STOPPED
-            </span>
+          <div className="mission-heading">
+            <h1 id="main-title">Bitcoin block <span>1,000,000</span> countdown</h1>
+            <span className={`feed-status ${feedStale || status === "offline" ? "feed-warning" : ""}`}>{feedLabel}</span>
           </div>
-          <div className="eyebrow">ONE CHAIN. ONE MILLION BLOCKS.</div>
-          <h1 id="main-title">
-            <span className="sr-only">Bitcoin block </span>
-            <span className="target-number">
-              1,000,000<span className="target-dot">.</span>
-            </span>
-            <span className="sr-only"> countdown</span>
-          </h1>
-          <div className="hero-bottom">
-            <p>
-              {arrived
-                ? "A million blocks. And we’re just getting started."
-                : "No opening bell. No closing time.\nJust the next block."}
-            </p>
-            <div className="remaining">
-              <span className="remaining-number">
-                {remaining === null ? "—" : fmt(remaining)}
-              </span>
-              <span>BLOCKS TO GO</span>
-            </div>
-          </div>
-          <div className="countdown-band">
-            <div
-              className="clock"
-              aria-label={
-                seconds === null
-                  ? "Loading estimated time remaining"
-                  : `Estimated ${times[0]} days, ${times[1]} hours, ${times[2]} minutes remaining`
-              }
-            >
+          <div className="countdown-hero">
+            <div className="clock-description">{arrived ? "Block 1,000,000 has been mined" : "Estimated time remaining"}</div>
+            <div className="clock" role="group" aria-label="Estimated time remaining">
               {times.map((time, i) => (
                 <div className="time-unit" key={i}>
-                  <span className="time-number">{arrived ? "00" : time}</span>
-                  <span className="time-label">
-                    {["DAYS", "HOURS", "MINUTES", "SECONDS"][i]}
-                  </span>
+                  <RollingNumber className="time-number" value={arrived ? "00" : time} direction="down" />
+                  <span className="time-label">{["DAYS", "HOURS", "MINUTES", "SECONDS"][i]}</span>
                 </div>
               ))}
             </div>
+          </div>
+          <div className="countdown-summary">
+            <div className="remaining">
+              <RollingNumber className="remaining-number" value={remaining === null ? "—" : fmt(remaining)} direction="down" />
+              <span>blocks to go</span>
+            </div>
             <div className="arrival">
-              <span className="label">
-                {arrived
-                  ? "MILESTONE REACHED"
-                  : estimateElapsed
-                    ? "ESTIMATE ELAPSED · WAITING FOR THE BLOCK"
-                    : "ESTIMATED ARRIVAL"}
-              </span>
-              <strong>{arrived ? "Welcome to one million." : etaDate}</strong>
-              <span>
-                Based on 10-minute blocks · UTC{" "}
-                <a
-                  href="#how-it-works"
-                  aria-label="How the arrival estimate works"
-                >
-                  ⓘ
-                </a>
-              </span>
+              <span className="label">{arrived ? "MILESTONE REACHED" : estimateElapsed ? "ESTIMATE ELAPSED · AWAITING BLOCK" : "ESTIMATED ARRIVAL"}</span>
+              <strong>{arrived ? "Block 1,000,000 mined" : etaDate}</strong>
+              <span>10-minute target interval · UTC <a href="#how-it-works" aria-label="How the arrival estimate works">ⓘ</a></span>
             </div>
           </div>
           <div className="chain-stage" key={drop}>
             <div className="stage-heading">
               <span>
-                <Radio size={14} /> THE CHAIN KEEPS MOVING
+                RECENT BLOCKS
               </span>
               <span>
                 {tip ? `LATEST #${fmt(tip.height)}` : "AWAITING FIRST BLOCK"}
@@ -446,7 +433,7 @@ export default function Countdown() {
                 {announcement ||
                   (age !== null
                     ? `Last block landed ${age < 1 ? "less than a minute" : `${fmt(age)} min`} ago`
-                    : "Every new block gets an entrance.")}
+                    : "Waiting for block data…")}
               </span>
               <div>
                 <button
@@ -486,7 +473,7 @@ export default function Countdown() {
             </div>
           </div>
           <div className="progress-label">
-            <span>THE ROAD TO A MILLION</span>
+            <span>PROGRESS TO BLOCK 1,000,000</span>
             <strong>
               {tip
                 ? `${Math.min(100, (tip.height / TARGET) * 100).toFixed(4)}%`
@@ -502,8 +489,7 @@ export default function Countdown() {
             <div>
               <span className="label">CURRENT HEIGHT</span>
               <strong>
-                {tip ? fmt(tip.height) : "—"}
-                <span> blocks</span>
+                <RollingNumber value={tip ? fmt(tip.height) : "—"} direction="up" />
               </strong>
             </div>
             <div>
@@ -539,7 +525,7 @@ export default function Countdown() {
               </strong>
             </div>
           </div>
-          {(status === "offline" || status === "stale") && (
+          {(status === "offline" || feedStale) && (
             <div className="connection-note">
               {snapshot
                 ? "Live refresh is temporarily unavailable. Displaying the last known chain."
@@ -548,27 +534,11 @@ export default function Countdown() {
             </div>
           )}
         </section>
-        <div className="ticker" aria-hidden="true">
-          <span>STILL EARLY.</span>
-          <span>BLOCK BY BLOCK.</span>
-          <span>DON’T TRUST. VERIFY.</span>
-          <span>STILL EARLY.</span>
-          <span>BLOCK BY BLOCK.</span>
-        </div>
+        <NetworkCharts snapshot={snapshot} network={network} now={now} />
         <section id="the-journey" className="journey shell content-section">
           <div className="section-title">
-            <div>
-              <span className="eyebrow">01 / PROOF OF TIME</span>
-              <h2>
-                A million blocks.
-                <br />
-                <span>Zero permission.</span>
-              </h2>
-            </div>
-            <p>
-              From a message in the genesis block to a global monetary network.
-              The history is written in blocks.
-            </p>
+            <div><h2>Block milestones</h2></div>
+            <p>Block 1,000,000 is a milestone, not a halving. The next subsidy reduction is at 1,050,000.</p>
           </div>
           <div className="timeline">
             {[
@@ -576,25 +546,25 @@ export default function Countdown() {
                 "000,000",
                 "2009",
                 "The genesis block",
-                "One block. A new beginning.",
+                "January 3, 2009 · height 0.",
               ],
               [
                 "210,000",
                 "2012",
                 "The first halving",
-                "The issuance rhythm begins.",
+                "Subsidy: 50 → 25 BTC.",
               ],
               [
                 "840,000",
                 "2024",
                 "The fourth halving",
-                "3.125 BTC. Same rules.",
+                "Subsidy: 6.25 → 3.125 BTC.",
               ],
               [
                 "1,000,000",
                 arrived ? "MILESTONE REACHED" : "UP NEXT",
-                "The million club",
-                "A milestone for everyone.",
+                "Block one million",
+                "Subsidy remains 3.125 BTC.",
               ],
               [
                 "1,050,000",
@@ -619,9 +589,9 @@ export default function Countdown() {
         <section id="block-parties" className="parties shell content-section">
           <div className="section-title">
             <div>
-              <span className="eyebrow">02 / DON’T CELEBRATE ALONE</span>
+
               <h2>
-                Find your block party<span className="orange">.</span>
+                Block 1,000,000 parties
               </h2>
             </div>
             <a
@@ -663,15 +633,12 @@ export default function Countdown() {
               <span className="card-link">See organizer’s latest details</span>
             </a>
             <div className="community-card">
-              <span className="tag">MAKE IT LOCAL</span>
+              <span className="tag">COMMUNITY DIRECTORIES</span>
               <h3>
-                Same block.
-                <br />
-                Your people.
+                Find a local Bitcoin group
               </h3>
               <p>
-                No million-block event nearby? Find your local Bitcoin community
-                and give them a reason to get together.
+                Find nearby groups to organize a block 1,000,000 gathering.
               </p>
               <a
                 href="https://btcmap.org/communities"
@@ -705,15 +672,12 @@ export default function Countdown() {
           className="faq-section shell content-section"
         >
           <div>
-            <span className="eyebrow">03 / DON’T TRUST. VERIFY.</span>
+
             <h2>
-              Big number.
-              <br />A few small details.
+              About the countdown
             </h2>
             <p>
-              This is an independent celebration of Bitcoin.
-              <br />
-              No tokens. No price predictions. Just blocks.
+              How the estimate works, where the data comes from, and what happens at block 1,000,000.
             </p>
           </div>
           <Accordion type="multiple" className="faq-list">
@@ -727,25 +691,15 @@ export default function Countdown() {
             ))}
           </Accordion>
         </section>
-        <section className="closing shell">
-          <span className="eyebrow">YOU’LL REMEMBER WHERE YOU WERE.</span>
-          <h2>
-            {arrived ? "We made it to " : "See you at "}
-            <span>1,000,000.</span>
-          </h2>
-          <button className="primary-button" onClick={share}>
-            Bring someone to the countdown <Copy size={17} />
-          </button>
-        </section>
       </main>
       <footer className="footer shell">
         <a className="brand" href="/">
           <Image unoptimized src="/favicon.svg" width="26" height="26" alt="" />
           <span>
-            HEIGHT<span className="brand-light">MILLION</span>
+            BLOCK<span className="brand-light">MILLION</span>
           </span>
         </a>
-        <p>Built for the next block. Open source. Always.</p>
+        <p>Open-source Bitcoin countdown.</p>
         <div>
           <a
             href={`https://${snapshot?.source || "mempool.space"}/`}

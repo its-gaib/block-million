@@ -8,8 +8,8 @@ export default function Page() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebSite",
-            name: "HEIGHT MILLION",
-            url: "https://heightmillion.pages.dev",
+            name: "BLOCK MILLION",
+            url: "https://blockmillion.pages.dev",
             description:
               "Live Bitcoin block 1,000,000 countdown with a time estimate, remaining blocks, and community events.",
           }),

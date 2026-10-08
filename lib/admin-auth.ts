@@ -31,7 +31,7 @@ export function adminChallenge() {
   return new Response("Owner authentication required.", {
     status: 401,
     headers: {
-      "WWW-Authenticate": 'Basic realm="HEIGHT MILLION owner", charset="UTF-8"',
+      "WWW-Authenticate": 'Basic realm="BLOCK MILLION owner", charset="UTF-8"',
       "Cache-Control": "private, no-store",
       Vary: "Authorization",
       "X-Robots-Tag": "noindex, nofollow",

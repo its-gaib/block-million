@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-const origin = "https://heightmillion.pages.dev";
+const origin = "https://blockmillion.pages.dev";
 async function read(path, options) {
   const response = await fetch(new URL(path, origin), {
     ...options,
@@ -12,7 +12,7 @@ async function check() {
   const home = await read("/");
   assert.equal(home.response.status, 200, "Homepage must return 200");
   assert.ok(
-    home.body.includes("1,000,000") && home.body.includes(origin),
+    home.body.includes("1,000,000") && home.body.includes("BLOCK MILLION") && home.body.includes(origin),
     "Homepage and canonical metadata must be present",
   );
   const assets = [
@@ -51,6 +51,15 @@ async function check() {
     !snapshot.stale && Date.now() - snapshot.fetchedAt < 120000,
     "Chain feed must be fresh",
   );
+  const network = await read("/api/network");
+  assert.equal(network.response.status, 200, "Network statistics must respond");
+  const metrics = JSON.parse(network.body);
+  for (const [name, maxAge] of [["mining", 720000], ["difficulty", 180000], ["mempool", 180000]]) {
+    assert.ok(metrics[name] && !metrics[name].stale && Date.now() - metrics[name].fetchedAt < maxAge,
+      `${name} statistics must be available and fresh`);
+  }
+  assert.ok(metrics.mining.data.hashrates.length >= 2, "Hashrate chart needs history");
+  assert.ok(Number.isSafeInteger(metrics.mempool.data.count), "Transaction backlog must be numeric");
   for (const headers of [
     {},
     {
@@ -72,7 +81,7 @@ async function check() {
     );
   }
   console.log(
-    `Live checks passed: ${origin} — homepage, ${assets.length} assets, public routes, fresh block ${snapshot.blocks[0].height}, and protected owner access.`,
+    `Live checks passed: ${origin} — homepage, ${assets.length} assets, public routes, fresh block ${snapshot.blocks[0].height}, network charts, and protected owner access.`,
   );
 }
 let failure;

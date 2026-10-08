@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
 export const metadata: Metadata = {
-  title: "Privacy | HEIGHT MILLION",
+  title: "Privacy | BLOCK MILLION",
   alternates: { canonical: "/privacy" },
 };
 export default function Privacy() {
   return (
     <main className="document">
-      <a href="/">Back to HEIGHT MILLION</a>
+      <a href="/">Back to BLOCK MILLION</a>
       <h1>
         Just blocks.
         <br />
         No following you around.
       </h1>
       <p>
-        HEIGHT MILLION is an independent, open-source Bitcoin countdown. Here is
+        BLOCK MILLION is an independent, open-source Bitcoin countdown. Here is
         what happens when you visit.
       </p>
       <h2>Simple first-party analytics</h2>
@@ -63,7 +63,7 @@ export default function Privacy() {
       <h2>Questions or fixes</h2>
       <p>
         <a
-          href="https://github.com/its-gaib/height-million/issues"
+          href="https://github.com/its-gaib/block-million/issues"
           target="_blank"
           rel="noopener noreferrer"
         >

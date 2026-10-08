@@ -9,7 +9,7 @@ const { staging, sourceCommit } = JSON.parse(
 );
 if (
   path.dirname(staging) !== tmpdir() ||
-  !path.basename(staging).startsWith("heightmillion-pages-")
+  !path.basename(staging).startsWith("blockmillion-pages-")
 )
   throw new Error(
     "Unexpected Pages artifact directory. Run npm run build:pages first.",
@@ -39,7 +39,7 @@ const result = spawnSync(
     "deploy",
     "public",
     "--project-name",
-    "heightmillion",
+    "blockmillion",
     "--branch",
     "launch",
     "--commit-hash",

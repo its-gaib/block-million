@@ -15,7 +15,7 @@ export default defineConfig(async () => {
         viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },
         inspectorPort: false,
         config: {
-          name: "heightmillion",
+          name: "blockmillion",
           main: "./build/worker.ts",
           compatibility_date: "2026-05-15",
           compatibility_flags: ["nodejs_compat"],
