@@ -57,4 +57,11 @@ const result = spawnSync(
   },
 );
 if (result.error) throw result.error;
-process.exit(result.status ?? 1);
+if (result.status !== 0) process.exit(result.status ?? 1);
+const checks = spawnSync(
+  process.execPath,
+  [path.join(root, "scripts/check-live.mjs")],
+  { cwd: root, stdio: "inherit" },
+);
+if (checks.error) throw checks.error;
+process.exit(checks.status ?? 1);
