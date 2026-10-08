@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { tmpdir } from "node:os";
 const root = fileURLToPath(new URL("../", import.meta.url));
-const { staging } = JSON.parse(
+const { staging, sourceCommit } = JSON.parse(
   await readFile(path.join(root, ".sites-runtime/pages-artifact.json"), "utf8"),
 );
 if (
@@ -19,6 +19,18 @@ const head = spawnSync("git", ["rev-parse", "HEAD"], {
   encoding: "utf8",
 });
 if (head.status !== 0) throw new Error("Commit the source before deploying.");
+const status = spawnSync("git", ["status", "--porcelain"], {
+  cwd: root,
+  encoding: "utf8",
+});
+if (
+  status.status !== 0 ||
+  status.stdout.trim() ||
+  sourceCommit !== head.stdout.trim()
+)
+  throw new Error(
+    "Source changed since the Pages build. Commit the work and run npm run build:pages again.",
+  );
 const result = spawnSync(
   process.execPath,
   [

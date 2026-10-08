@@ -1,3 +1,4 @@
+import { spawnSync } from "node:child_process";
 import {
   cp,
   mkdir,
@@ -11,6 +12,18 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("../", import.meta.url));
 // A separate project directory avoids Cloudflare Vite's Workers-config redirect.
+const gitHead = spawnSync("git", ["rev-parse", "HEAD"], {
+  cwd: root,
+  encoding: "utf8",
+});
+const gitStatus = spawnSync("git", ["status", "--porcelain"], {
+  cwd: root,
+  encoding: "utf8",
+});
+const sourceCommit =
+  gitHead.status === 0 && gitStatus.status === 0 && !gitStatus.stdout.trim()
+    ? gitHead.stdout.trim()
+    : null;
 const staging = await mkdtemp(path.join(tmpdir(), "heightmillion-pages-"));
 const publicDir = path.join(staging, "public");
 await cp(path.join(root, "dist/client"), publicDir, { recursive: true });
@@ -49,7 +62,7 @@ await mkdir(path.join(root, ".sites-runtime"), { recursive: true });
 await writeFile(
   path.join(root, ".sites-runtime/pages-artifact.json"),
   JSON.stringify(
-    { staging, publicDir, generatedAt: new Date().toISOString() },
+    { staging, publicDir, sourceCommit, generatedAt: new Date().toISOString() },
     null,
     2,
   ),
