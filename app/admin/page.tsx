@@ -8,11 +8,6 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import type { Metadata } from "next";
-import {
-  getChatGPTUser,
-  chatGPTSignInPath,
-  chatGPTSignOutPath,
-} from "@/app/chatgpt-auth";
 import { isOwner } from "@/lib/owner";
 import { getDatabase } from "@/db";
 export const dynamic = "force-dynamic";
@@ -73,34 +68,11 @@ async function readAnalytics() {
   }
 }
 export default async function Admin() {
-  const user = await getChatGPTUser();
-  if (!user)
-    return (
-      <main className="document">
-        <Link href="/">HEIGHT MILLION</Link>
-        <h1>Private analytics</h1>
-        <p>
-          Visitor counts and what people do on the countdown. Only the site
-          owner can see this dashboard.
-        </p>
-        <a
-          className="primary-button"
-          href={chatGPTSignInPath("/admin")}
-          target="_top"
-        >
-          Sign in with ChatGPT
-        </a>
-      </main>
-    );
   if (!(await isOwner()))
     return (
       <main className="document">
-        <Link href="/">Back to countdown</Link>
         <h1>Owner access only</h1>
-        <p>This account does not have access to the analytics dashboard.</p>
-        <a href={chatGPTSignOutPath("/admin")} target="_top">
-          Sign out and use the owner account
-        </a>
+        <p>Authenticate with the owner credentials to view this page.</p>
       </main>
     );
   const analytics = await readAnalytics();
@@ -225,11 +197,6 @@ export default async function Admin() {
         We store no IP addresses, full URLs, emails or fingerprints in
         analytics. Records are retained for approximately 90 days and purged as
         new events arrive.
-      </p>
-      <p>
-        <a href={chatGPTSignOutPath("/")} target="_top">
-          Sign out
-        </a>
       </p>
     </main>
   );

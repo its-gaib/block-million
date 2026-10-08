@@ -1,0 +1,13 @@
+{
+  "name": "heightmillion",
+  "account_id": "40004c1e2f630c996ceaf76c198316ec",
+  "pages_build_output_dir": "./public",
+  "compatibility_date": "2026-05-15",
+  "compatibility_flags": ["nodejs_compat"],
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "heightmillion",
+    "database_id": "011241a5-2083-40ee-a56d-3ddfb46eda6a"
+  }],
+  "send_metrics": false
+}

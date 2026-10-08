@@ -53,12 +53,13 @@ export default function Privacy() {
         identifier to either provider. Following an external link takes you to
         that service, which has its own privacy practices.
       </p>
-      <h2>Hosting and sign-in</h2>
+      <h2>Hosting and access</h2>
       <p>
-        The site runs on OpenAI Sites infrastructure. The hosting provider may
+        The site runs on Cloudflare Pages. The hosting provider may
         process ordinary connection data needed to serve and protect the site
-        under its own policies. Only the analytics dashboard uses ChatGPT
-        sign-in. Public visitors do not need an account.
+        under its own policies. The owner’s private dashboard is protected by a
+        browser password prompt. Public visitors do not need an account, and
+        the site does not offer public registration.
       </p>
       <h2>Questions or fixes</h2>
       <p>

@@ -9,7 +9,7 @@ export default function Page() {
             "@context": "https://schema.org",
             "@type": "WebSite",
             name: "HEIGHT MILLION",
-            url: "https://height-million.frosty-okapi-1278.chatgpt.site",
+            url: "https://heightmillion.pages.dev",
             description:
               "Live Bitcoin block 1,000,000 countdown with a time estimate, remaining blocks, and community events.",
           }),

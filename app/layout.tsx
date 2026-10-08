@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-const origin = "https://height-million.frosty-okapi-1278.chatgpt.site";
+const origin = "https://heightmillion.pages.dev";
 export const metadata: Metadata = {
   metadataBase: new URL(origin),
   title: "Bitcoin Block 1,000,000 Countdown | HEIGHT MILLION",
