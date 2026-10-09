@@ -1,7 +1,7 @@
 /* The estimate and remaining blocks are the page's primary information. */
-.mission .mission-heading { display:flex; justify-content:space-between; align-items:center; gap:20px; margin:4px 0 28px; }
-.mission h1 { font:500 19px/1.5 Arial, sans-serif; letter-spacing:-.3px; margin:0; white-space:normal; color:#b6b7b3; }
-.mission h1 span { color:var(--foreground); font-weight:700; }
+.mission .mission-heading { display:flex; justify-content:space-between; align-items:end; gap:20px; margin:4px 0 23px; }
+.mission h1 { font:750 clamp(30px,3.8vw,52px)/1.08 Arial, sans-serif; letter-spacing:-1.8px; margin:0; white-space:normal; color:var(--foreground); }
+.mission h1 span { color:var(--orange); font-weight:750; display:inline-block; }
 .feed-status { flex-shrink:0; font:11px/1.5 monospace; color:#959a96; }
 .feed-warning { color:#ffc185; }
 .clock-description { font:12px/1.5 monospace; color:#b1b3ad; margin-bottom:13px; letter-spacing:1.1px; text-transform:uppercase; }
@@ -31,8 +31,8 @@
   .mission .remaining-number { font-size:6vw; }
 }
 @media (max-width:760px) {
-  .mission .mission-heading { display:block; margin:0 0 23px; }
-  .mission h1 { font-size:16px; }
+  .mission .mission-heading { display:block; margin:0 0 18px; }
+  .mission h1 { font-size:clamp(27px,7.3vw,43px); letter-spacing:-1px; line-height:1.1; }
   .feed-status { display:block; margin-top:4px; font-size:10px; }
   .clock-description { font-size:10px; margin-bottom:10px; }
   .mission .clock { gap:6px; }
@@ -49,3 +49,14 @@
   .stage-heading > span { font-size:10px; }
 }
 @media (prefers-reduced-motion:reduce) { .mission .time-unit { scroll-behavior:auto; } }
+
+@media (max-width:1100px) {
+  .header nav a.nav-network, .header nav a.nav-parties, .header nav a.nav-code { display:none; }
+}
+@media (max-width:760px) {
+  .header nav a.nav-price, .header nav a.nav-history { display:inline; }
+  .header nav { gap:10px; font-size:11px; }
+  .header .brand { font-size:14px; gap:5px; }
+  .header .brand img { width:23px; height:23px; }
+  .header { gap:8px; }
+}

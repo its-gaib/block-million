@@ -83,7 +83,7 @@ export function NetworkCharts({ snapshot, network, now }: {
   return <section id="network" className="network-section shell content-section" aria-labelledby="network-heading">
     <div className="network-heading">
       <div><p className="network-kicker">Bitcoin network</p><h2 id="network-heading">Mining and network activity</h2></div>
-      <p>Mining, congestion and the latest blocks.<br />Times and dates are in UTC.</p>
+      <p>Mining, congestion and the latest blocks.{" "}<br />Times and dates are in UTC.</p>
     </div>
 
     <dl className="network-metrics">

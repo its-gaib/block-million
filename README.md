@@ -9,11 +9,15 @@ A live, open-source countdown to Bitcoin block height **1,000,000**.
 - Live Bitcoin height, blocks remaining, and an estimated arrival time.
 - New blocks drop into an original isometric chain, with optional sound and reduced-motion support.
 - Focused watch mode and a block-drop preview to try the animation.
-- Network hashrate history, recent block interval charts, difficulty estimates, and transaction backlog.
-- Mining subsidy, milestone history, and halving context.
+- Bitcoin USD price history with 30-day, one-year and all-time views and linear/logarithmic scales.
+- Historical blocks 1, 10, 100, 1,000, 10,000 and 100,000 with dates, daily price and hashrate estimates.
+- Interactive historical growth charts, plus network hashrate, recent block intervals, difficulty estimates and transaction backlog.
+- An interactive issuance curve and halving boundaries up to block 1,000,000.
 - Community links and block-million party listings.
 
 Bitcoin data comes from [mempool.space](https://mempool.space), with [Blockstream](https://blockstream.info) as a fallback. The site checks for new blocks every 30 seconds while the tab is visible and labels stale data when a refresh fails.
+
+Historical block records link to their block explorer. Daily historical prices and hashrate estimates are sourced from [Blockchain.com](https://www.blockchain.com/explorer); daily observations are distinct from exact block timestamps. Missing early prices remain unavailable.
 
 The countdown targets **block height 1,000,000**. Bitcoin's genesis block is height 0, so the chain will contain 1,000,001 blocks including genesis at this milestone. Blocks remaining are calculated from the current height. The time estimate adds Bitcoin's ten-minute target interval for each remaining block to the latest block's timestamp; actual arrival can be earlier or later.
 

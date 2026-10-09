@@ -1,0 +1,72 @@
+.issuance-section { min-width: 0; }
+.issuance-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; margin-bottom: 28px; }
+.issuance-heading > div { max-width: 760px; }
+.issuance-kicker { color: #ff9a50; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
+.issuance-heading h2 { font-size: clamp(27px, 3.3vw, 42px); }
+.issuance-heading > p { max-width: 260px; color: #aaa9a5; font-size: 13px; line-height: 1.7; }
+.issuance-card { min-width: 0; padding: 26px; border: 1px solid #30302d; border-radius: 4px; background: radial-gradient(ellipse at 80% 20%, #ff781f06, transparent 60%), #111212; }
+.issuance-toolbar { display: flex; gap: 18px; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+.issuance-modes { display: flex; gap: 3px; padding: 3px; border: 1px solid #30302d; border-radius: 4px; background: #0c0d0e; }
+.issuance-modes button { padding: 9px 15px; border-radius: 2px; font-size: 12px; color: #aaa9a5; cursor: pointer; }
+.issuance-modes button[aria-pressed="true"] { background: #ff781f; color: #160e07; }
+.issuance-modes button:focus-visible, .issuance-presets button:focus-visible, .issuance-data summary:focus-visible { outline: 2px solid #f4f1e9; outline-offset: 4px; }
+.issuance-schedule-label { color: #999a96; font-size: 11px; }
+.issuance-readout { display: grid; grid-template-columns: .8fr 1.3fr .9fr; gap: 22px; margin: 0 0 20px; }
+.issuance-readout dt { font-size: 11px; color: #aaa9a5; line-height: 1.6; margin-bottom: 7px; }
+.issuance-readout dd { font-family: var(--font-geist-mono), ui-monospace, monospace; font-variant-numeric: tabular-nums; font-size: clamp(19px, 2.4vw, 30px); line-height: 1.3; letter-spacing: -.05em; overflow-wrap: anywhere; }
+.issuance-readout dd span { margin-left: 8px; font-size: 12px; letter-spacing: 0; color: #aaa9a5; }
+.issuance-readout > div:nth-child(2) dd { color: #ff9a50; }
+.issuance-figure { margin: 0; }
+.issuance-plot { display: block; width: 100%; height: auto; overflow: visible; }
+.issuance-gridline { stroke: #2b2c2a; stroke-width: 1; }
+.issuance-axis { fill: #a9aaa5; font: 12px ui-monospace, monospace; }
+.issuance-halving { stroke: #5b4434; stroke-dasharray: 3 6; }
+.issuance-halving-label { fill: #bd8154; font: 11px ui-monospace, monospace; }
+.issuance-line { fill: none; stroke: #ff8d3b; stroke-width: 3; stroke-linejoin: round; }
+.issuance-current-line { stroke: #9fcc8d; stroke-dasharray: 3 5; stroke-width: 1; }
+.issuance-current-point { fill: #9fcc8d; stroke: #111212; stroke-width: 2; }
+.issuance-selected-line { stroke: #f4f1e970; stroke-width: 1; }
+.issuance-selected-ring { fill: #111212; stroke: #f4f1e9; stroke-width: 1; }
+.issuance-selected-point { fill: #f4f1e9; }
+.issuance-legend { display: flex; flex-wrap: wrap; gap: 12px 22px; color: #aaa9a5; font-size: 11px; line-height: 1.5; margin: 8px 0 26px; }
+.issuance-legend span { display: inline-flex; gap: 7px; align-items: center; }
+.issuance-legend i { width: 7px; height: 7px; border-radius: 50%; }
+.issuance-legend-selected { background: #f4f1e9; }
+.issuance-legend-current { background: #9fcc8d; }
+.issuance-scrubber { padding-top: 21px; border-top: 1px solid #292a2b; }
+.issuance-scrubber label { display: flex; justify-content: space-between; font-size: 12px; color: #aaa9a5; }
+.issuance-scrubber output { color: #f4f1e9; font-family: ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+.issuance-scrubber input[type="range"] { display: block; width: 100%; height: 34px; margin: 9px 0 12px; accent-color: #ff8d3b; cursor: ew-resize; }
+.issuance-scrubber input:focus-visible { outline: 2px solid #ff8d3b; outline-offset: 3px; }
+.issuance-presets { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+.issuance-presets button { min-width: 0; border: 1px solid #30302d; border-radius: 3px; padding: 11px 6px; font-size: 11px; line-height: 1.5; color: #b9b9b3; cursor: pointer; background: #151615; }
+.issuance-presets button small { display: block; font-family: ui-monospace, monospace; font-size: 10px; color: #82867e; margin-top: 3px; }
+.issuance-presets button:hover { border-color: #93613a; }
+.issuance-presets button[aria-pressed="true"] { border-color: #c96b2b; background: #ff781f12; color: #ffab6d; }
+.issuance-presets button[aria-pressed="true"] small { color: #db9664; }
+.issuance-note { margin-top: 21px; color: #92968f; font-size: 11px; line-height: 1.8; }
+.issuance-note a { color: #d4ad8e; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+.issuance-data { margin-top: 18px; border-top: 1px solid #292a2b; padding-top: 15px; font-size: 11px; color: #aaa9a5; }
+.issuance-data summary { cursor: pointer; width: fit-content; }
+.issuance-table-scroll { max-width: 100%; overflow-x: auto; margin-top: 15px; }
+.issuance-data table { width: 100%; border-collapse: collapse; text-align: right; font-family: ui-monospace, monospace; }
+.issuance-data caption { text-align: left; margin-bottom: 12px; }
+.issuance-data th, .issuance-data td { padding: 10px 8px; border-bottom: 1px solid #292a2b; white-space: nowrap; }
+.issuance-data th:first-child { text-align: left; }
+.issuance-data tbody th { font-weight: 400; }
+@media (max-width: 760px) {
+  .issuance-heading { display: block; }
+  .issuance-heading > p { margin-top: 15px; max-width: none; }
+  .issuance-heading h2 { letter-spacing: -.8px; }
+  .issuance-card { padding: 18px 14px; }
+  .issuance-toolbar { align-items: flex-start; flex-direction: column; gap: 12px; }
+  .issuance-readout { grid-template-columns: 1fr 1fr; gap: 18px 12px; }
+  .issuance-readout > div:nth-child(2) { grid-column: 1 / -1; grid-row: 1; }
+  .issuance-readout > div:nth-child(2) dd { font-size: 27px; }
+  .issuance-readout dd { font-size: 21px; }
+  .issuance-axis { font-size: 20px; }
+  .issuance-halving-label { font-size: 18px; }
+  .issuance-presets { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .issuance-legend { font-size: 10px; gap: 8px 15px; }
+  .issuance-modes button { padding: 9px 11px; }
+}

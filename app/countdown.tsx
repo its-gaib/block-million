@@ -31,6 +31,9 @@ import {
 import { track } from "@/lib/track";
 import { RollingNumber } from "@/components/rolling-number";
 import { NetworkCharts } from "@/components/network-charts";
+import { MarketCharts } from "@/components/market-charts";
+import { BlockHistory } from "@/components/block-history";
+import { IssuanceChart } from "@/components/issuance-chart";
 import type { NetworkSnapshot } from "@/lib/network";
 import "@/components/rolling-number.css";
 import "./countdown.css";
@@ -38,6 +41,14 @@ const fmt = (n: number) => n.toLocaleString("en-US");
 const pad = (n: number) => String(n).padStart(2, "0");
 const repo = "https://github.com/its-gaib/block-million";
 const faq = [
+  [
+    "What does a logarithmic chart show?",
+    "A linear axis gives equal space to equal differences. A logarithmic axis gives equal space to equal ratios: 1 to 10 takes the same space as 10 to 100. The log–log views apply this to both axes so Bitcoin’s earliest blocks and today’s network can be compared on one chart. These are historical comparisons, not price forecasts.",
+  ],
+  [
+    "Are the historical prices and hashrates exact at each block?",
+    "Block dates, sizes and transaction counts come from the blocks themselves. Historical prices and network hashrates are daily observations for that UTC date, not measurements at the exact second a block was mined. Early dates without exchange price coverage are shown as unavailable, never as zero dollars.",
+  ],
   [
     "When will Bitcoin reach block 1,000,000?",
     "There is no fixed date. Our estimate starts at the latest block’s timestamp and adds 10 minutes for each remaining block. It updates as the chain grows. Real blocks can arrive seconds or hours apart, so treat this as an estimate, not a calendar appointment.",
@@ -337,12 +348,15 @@ export default function Countdown() {
           </span>
         </a>
         <nav aria-label="Main navigation">
-          <a href="#network">Network statistics</a>
-          <a href="#block-parties">Block parties</a>
+          <a className="nav-price" href="#bitcoin-price" aria-label="Bitcoin price">Price</a>
+          <a className="nav-history" href="#block-history" aria-label="Block history">History</a>
+          <a className="nav-network" href="#network">Network</a>
+          <a className="nav-parties" href="#block-parties">Parties</a>
           <a
             href={repo}
             target="_blank"
             rel="noopener noreferrer"
+            className="nav-code"
             aria-label="Source code on GitHub"
           >
             <Code size={18} />
@@ -359,11 +373,11 @@ export default function Countdown() {
           aria-labelledby="main-title"
         >
           <div className="mission-heading">
-            <h1 id="main-title">Bitcoin block <span>1,000,000</span> countdown</h1>
+            <h1 id="main-title">1 Million <span>Bitcoin Blocks</span></h1>
             <span className={`feed-status ${feedStale || status === "offline" ? "feed-warning" : ""}`}>{feedLabel}</span>
           </div>
           <div className="countdown-hero">
-            <div className="clock-description">{arrived ? "Block 1,000,000 has been mined" : "Estimated time remaining"}</div>
+            <div className="clock-description">{arrived ? "Block 1,000,000 has been mined" : "Estimated countdown to block 1,000,000"}</div>
             <div className="clock" role="group" aria-label="Estimated time remaining">
               {times.map((time, i) => (
                 <div className="time-unit" key={i}>
@@ -534,6 +548,9 @@ export default function Countdown() {
             </div>
           )}
         </section>
+        <MarketCharts snapshot={snapshot} now={now} />
+        <BlockHistory snapshot={snapshot} network={network} />
+        <IssuanceChart snapshot={snapshot} />
         <NetworkCharts snapshot={snapshot} network={network} now={now} />
         <section id="the-journey" className="journey shell content-section">
           <div className="section-title">

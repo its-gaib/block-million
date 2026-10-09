@@ -3,14 +3,14 @@ import "./globals.css";
 const origin = "https://blockmillion.pages.dev";
 export const metadata: Metadata = {
   metadataBase: new URL(origin),
-  title: "Bitcoin Block 1,000,000 Countdown | BLOCK MILLION",
+  title: "1 Million Bitcoin Blocks — Live Countdown | BLOCK MILLION",
   description:
-    "The live countdown to Bitcoin block 1,000,000. Watch new blocks land, track the blocks and estimated time remaining, and find your million-block party.",
+    "The live countdown to Bitcoin block 1,000,000. Watch new blocks land, track the blocks and estimated time remaining, explore Bitcoin’s price history and early block milestones.",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Bitcoin Block 1,000,000 Countdown | BLOCK MILLION",
+    title: "1 Million Bitcoin Blocks — Live Countdown | BLOCK MILLION",
     description:
-      "Time and blocks remaining until Bitcoin block 1,000,000, with network statistics, charts, and community events.",
+      "Time and blocks remaining until Bitcoin block 1,000,000, with Bitcoin price charts, historical milestones, and network statistics.",
     type: "website",
     url: origin,
     siteName: "BLOCK MILLION",
