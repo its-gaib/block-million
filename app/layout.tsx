@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description:
     "The live countdown to Bitcoin block 1,000,000. Watch new blocks land, track the blocks and estimated time remaining, and explore Bitcoin’s early block milestones.",
   alternates: { canonical: "/" },
+  verification: {
+    google: "FcYssj_G7juzgTqjinRgEWMyKt3TIa9a4qNc7QybZGo",
+  },
   openGraph: {
     title: "1 Million Bitcoin Blocks — Live Countdown | BLOCK MILLION",
     description:
