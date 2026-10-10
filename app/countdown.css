@@ -51,10 +51,10 @@
 @media (prefers-reduced-motion:reduce) { .mission .time-unit { scroll-behavior:auto; } }
 
 @media (max-width:1100px) {
-  .header nav a.nav-network, .header nav a.nav-parties, .header nav a.nav-code { display:none; }
+  .header nav a.nav-parties, .header nav a.nav-code { display:none; }
 }
 @media (max-width:760px) {
-  .header nav a.nav-price, .header nav a.nav-history { display:inline; }
+  .header nav a.nav-history { display:inline; }
   .header nav { gap:10px; font-size:11px; }
   .header .brand { font-size:14px; gap:5px; }
   .header .brand img { width:23px; height:23px; }

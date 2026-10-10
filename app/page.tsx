@@ -11,7 +11,7 @@ export default function Page() {
             name: "BLOCK MILLION",
             url: "https://blockmillion.pages.dev",
             description:
-              "Live Bitcoin block 1,000,000 countdown with a time estimate, remaining blocks, Bitcoin price history, and historical block milestones.",
+              "Live Bitcoin block 1,000,000 countdown with a time estimate, remaining blocks, and historical block milestones.",
           }),
         }}
       />

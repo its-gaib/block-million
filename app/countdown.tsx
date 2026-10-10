@@ -30,21 +30,14 @@ import {
 } from "@/lib/bitcoin";
 import { track } from "@/lib/track";
 import { RollingNumber } from "@/components/rolling-number";
-import { NetworkCharts } from "@/components/network-charts";
-import { MarketCharts } from "@/components/market-charts";
 import { BlockHistory } from "@/components/block-history";
 import { IssuanceChart } from "@/components/issuance-chart";
-import type { NetworkSnapshot } from "@/lib/network";
 import "@/components/rolling-number.css";
 import "./countdown.css";
 const fmt = (n: number) => n.toLocaleString("en-US");
 const pad = (n: number) => String(n).padStart(2, "0");
 const repo = "https://github.com/its-gaib/block-million";
 const faq = [
-  [
-    "What does a logarithmic chart show?",
-    "A linear axis gives equal space to equal differences. A logarithmic axis gives equal space to equal ratios: 1 to 10 takes the same space as 10 to 100. The log–log views apply this to both axes so Bitcoin’s earliest blocks and today’s network can be compared on one chart. These are historical comparisons, not price forecasts.",
-  ],
   [
     "Are the historical prices and hashrates exact at each block?",
     "Block dates, sizes and transaction counts come from the blocks themselves. Historical prices and network hashrates are daily observations for that UTC date, not measurements at the exact second a block was mined. Early dates without exchange price coverage are shown as unavailable, never as zero dollars.",
@@ -63,7 +56,7 @@ const faq = [
   ],
   [
     "Where does the live data come from?",
-    "We read the active Bitcoin chain from mempool.space, with Blockstream as a fallback. The site checks every 30 seconds while visible. If fresh data is unavailable, we keep the last known values and clearly label them. Network statistics come from mempool.space; the transaction backlog can fall back to Blockstream. Network data is refreshed every minute, with hashrate history cached for 10 minutes. The block-drop preview never changes real data.",
+    "We read the active Bitcoin chain from mempool.space, with Blockstream as a fallback. The site checks every 30 seconds while visible. If fresh data is unavailable, we keep the last known values and clearly label them. The block-drop preview never changes real data.",
   ],
 ];
 function Cube({
@@ -105,7 +98,6 @@ function Cube({
 }
 export default function Countdown() {
   const [snapshot, setSnapshot] = useState<ChainSnapshot | null>(null);
-  const [network, setNetwork] = useState<NetworkSnapshot | null>(null);
   const [now, setNow] = useState<number | null>(null);
   const [status, setStatus] = useState<
     "connecting" | "live" | "stale" | "offline"
@@ -222,38 +214,6 @@ export default function Countdown() {
     };
   }, [refresh]);
   useEffect(() => {
-    let active = true;
-    let loading = false;
-    const controller = new AbortController();
-    async function refreshNetwork() {
-      if (loading || document.hidden) return;
-      loading = true;
-      try {
-        const response = await fetch("/api/network", {
-          cache: "no-store",
-          signal: AbortSignal.any([controller.signal, AbortSignal.timeout(18000)]),
-        });
-        if (!response.ok) throw new Error("Network statistics unavailable");
-        const next: NetworkSnapshot = await response.json();
-        if (active) setNetwork(next);
-      } catch {
-        // Keep each resource's original timestamp so the dashboard marks it stale.
-      } finally {
-        loading = false;
-      }
-    }
-    void refreshNetwork();
-    const poll = setInterval(() => void refreshNetwork(), 60000);
-    const visible = () => { if (!document.hidden) void refreshNetwork(); };
-    document.addEventListener("visibilitychange", visible);
-    return () => {
-      active = false;
-      controller.abort();
-      clearInterval(poll);
-      document.removeEventListener("visibilitychange", visible);
-    };
-  }, []);
-  useEffect(() => {
     if (!announcement) return;
     const t = setTimeout(() => setAnnouncement(""), 9000);
     return () => clearTimeout(t);
@@ -348,9 +308,7 @@ export default function Countdown() {
           </span>
         </a>
         <nav aria-label="Main navigation">
-          <a className="nav-price" href="#bitcoin-price" aria-label="Bitcoin price">Price</a>
           <a className="nav-history" href="#block-history" aria-label="Block history">History</a>
-          <a className="nav-network" href="#network">Network</a>
           <a className="nav-parties" href="#block-parties">Parties</a>
           <a
             href={repo}
@@ -548,10 +506,8 @@ export default function Countdown() {
             </div>
           )}
         </section>
-        <MarketCharts snapshot={snapshot} now={now} />
-        <BlockHistory snapshot={snapshot} network={network} />
+        <BlockHistory snapshot={snapshot} />
         <IssuanceChart snapshot={snapshot} />
-        <NetworkCharts snapshot={snapshot} network={network} now={now} />
         <section id="the-journey" className="journey shell content-section">
           <div className="section-title">
             <div><h2>Block milestones</h2></div>

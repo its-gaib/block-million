@@ -34,37 +34,10 @@ export function milestoneHashrateSource(milestone: BlockMilestone): string {
   return `https://api.blockchain.info/charts/hash-rate?start=${date}&timespan=1days&format=json`;
 }
 
-/** UTC elapsed time from the genesis header; unavailable timestamps stay missing. */
-export function daysSinceGenesis(timestamp: number | null | undefined): number | null {
-  return typeof timestamp === "number" && Number.isFinite(timestamp) && timestamp >= GENESIS_TIMESTAMP
-    ? (timestamp - GENESIS_TIMESTAMP) / 86_400
-    : null;
-}
-
-export type ScaleMode = "linear" | "log";
-
-/** Normalize a value to a chart domain. Log scales must never invent zero points. */
-export function chartFraction(value: number, minimum: number, maximum: number, mode: ScaleMode): number | null {
-  if (![value, minimum, maximum].every(Number.isFinite) || minimum >= maximum) return null;
-  if (mode === "log") {
-    if (value <= 0 || minimum <= 0) return null;
-    return (Math.log10(value) - Math.log10(minimum)) / (Math.log10(maximum) - Math.log10(minimum));
-  }
-  return (value - minimum) / (maximum - minimum);
-}
-
 export function formatHashrate(value: number | null | undefined): string {
   if (value == null || !Number.isFinite(value) || value < 0) return "Unavailable";
   const units = ["H/s", "kH/s", "MH/s", "GH/s", "TH/s", "PH/s", "EH/s", "ZH/s"];
   const exponent = Math.min(units.length - 1, Math.max(0, Math.floor(Math.log10(value || 1) / 3)));
   const amount = value / 1000 ** exponent;
   return `${new Intl.NumberFormat("en-US", { maximumFractionDigits: amount < 10 ? 2 : 1 }).format(amount)} ${units[exponent]}`;
-}
-
-/** An upper limit with two useful intermediate ticks for a linear graph. */
-export function linearChartMaximum(value: number): number {
-  if (!Number.isFinite(value) || value <= 0) return 1;
-  const magnitude = 10 ** Math.floor(Math.log10(value));
-  const scaled = value / magnitude;
-  return (scaled <= 1 ? 1 : scaled <= 2 ? 2 : scaled <= 5 ? 5 : 10) * magnitude;
 }

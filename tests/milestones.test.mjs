@@ -3,10 +3,7 @@ import assert from "node:assert/strict";
 import {
   BLOCK_MILESTONES,
   GENESIS_TIMESTAMP,
-  chartFraction,
-  daysSinceGenesis,
   formatHashrate,
-  linearChartMaximum,
   milestoneBlockSource,
   milestoneHashrateSource,
 } from "../lib/milestones.ts";
@@ -27,30 +24,10 @@ test("milestones preserve verified headers and missing early exchange prices", (
   assert.equal(BLOCK_MILESTONES[0].dailyHashrate, BLOCK_MILESTONES[1].dailyHashrate);
 });
 
-test("elapsed days use seconds, preserve fractions, and reject missing or pre-genesis dates", () => {
-  assert.equal(daysSinceGenesis(GENESIS_TIMESTAMP), 0);
-  assert.equal(daysSinceGenesis(GENESIS_TIMESTAMP + 129600), 1.5);
-  for (const value of [null, undefined, NaN, Infinity, GENESIS_TIMESTAMP - 1]) assert.equal(daysSinceGenesis(value), null);
-});
-
-test("log-log coordinates put multiplicative steps at equal distances on either axis", () => {
-  assert.equal(chartFraction(1, 1, 1e6, "log"), 0);
-  assert.equal(chartFraction(1000, 1, 1e6, "log"), 0.5);
-  assert.equal(chartFraction(1e6, 1, 1e6, "log"), 1);
-  assert.equal(chartFraction(1e9, 1e6, 1e12, "log"), 0.5);
-  assert.equal(chartFraction(500000, 0, 1e6, "linear"), 0.5);
-  for (const value of [0, -1, NaN, Infinity]) assert.equal(chartFraction(value, 1, 1e6, "log"), null);
-  assert.equal(chartFraction(1, 0, 1e6, "log"), null);
-  assert.equal(chartFraction(1, 2, 2, "linear"), null);
-});
-
 test("hashrate formatting does not confuse H/s with provider TH/s", () => {
   assert.equal(formatHashrate(BLOCK_MILESTONES[0].dailyHashrate), "695.9 kH/s");
   assert.equal(formatHashrate(BLOCK_MILESTONES.at(-1).dailyHashrate), "123.8 GH/s");
   assert.equal(formatHashrate(1e18), "1 EH/s");
   assert.equal(formatHashrate(null), "Unavailable");
   assert.equal(formatHashrate(NaN), "Unavailable");
-  assert.equal(linearChartMaximum(957), 1000);
-  assert.equal(linearChartMaximum(1.3e21), 2e21);
-  assert.equal(linearChartMaximum(0), 1);
 });

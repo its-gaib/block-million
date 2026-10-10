@@ -51,26 +51,8 @@ async function check() {
     !snapshot.stale && Date.now() - snapshot.fetchedAt < 120000,
     "Chain feed must be fresh",
   );
-  const network = await read("/api/network");
-  assert.equal(network.response.status, 200, "Network statistics must respond");
-  const metrics = JSON.parse(network.body);
-  for (const [name, maxAge] of [["mining", 720000], ["difficulty", 180000], ["mempool", 180000]]) {
-    assert.ok(metrics[name] && !metrics[name].stale && Date.now() - metrics[name].fetchedAt < maxAge,
-      `${name} statistics must be available and fresh`);
-  }
-  assert.ok(metrics.mining.data.hashrates.length >= 2, "Hashrate chart needs history");
-  assert.ok(Number.isSafeInteger(metrics.mempool.data.count), "Transaction backlog must be numeric");
   assert.ok(home.body.includes("1 Million") && home.body.includes("Bitcoin Blocks"),
     "Prominent Bitcoin countdown heading must be present");
-  const market = await read("/api/market");
-  assert.equal(market.response.status, 200, "Bitcoin market data must respond");
-  const prices = JSON.parse(market.body);
-  assert.ok(prices.spot && !prices.spot.stale && prices.spot.data.usd > 0 &&
-    Date.now() - prices.spot.fetchedAt < 180000, "Current Bitcoin price must be fresh");
-  assert.ok(prices.history && !prices.history.stale && prices.history.data.points.length > 500 &&
-    Date.now() - prices.history.fetchedAt < 21800000, "Bitcoin price history must be available");
-  assert.ok(prices.history.data.points.every(point => point.usd > 0),
-    "Unavailable early prices must never be shown as zero");
   for (const headers of [
     {},
     {
@@ -92,7 +74,7 @@ async function check() {
     );
   }
   console.log(
-    `Live checks passed: ${origin} — homepage, ${assets.length} assets, public routes, fresh block ${snapshot.blocks[0].height}, market data, network charts, and protected owner access.`,
+    `Live checks passed: ${origin} — homepage, ${assets.length} assets, public routes, fresh block ${snapshot.blocks[0].height}, and protected owner access.`,
   );
 }
 let failure;

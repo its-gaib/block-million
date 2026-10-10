@@ -19,10 +19,9 @@ async function read(origin, pathname, options = {}) {
 }
 
 async function verifyDestination() {
-  const [home, chain, network, admin] = await Promise.all([
+  const [home, chain, admin] = await Promise.all([
     read(canonical, "/"),
     read(canonical, "/api/chain"),
-    read(canonical, "/api/network"),
     read(canonical, "/admin"),
   ]);
   assert.equal(home.response.status, 200, "New homepage must return 200");
@@ -47,12 +46,6 @@ async function verifyDestination() {
       Date.now() - snapshot.fetchedAt >= -60000 &&
       Date.now() - snapshot.fetchedAt < 120000,
     "New chain API must provide fresh data",
-  );
-  assert.equal(network.response.status, 200, "New network API must return 200");
-  const networkSnapshot = JSON.parse(network.body);
-  assert.ok(
-    networkSnapshot && typeof networkSnapshot === "object" && !Array.isArray(networkSnapshot),
-    "New network API must return JSON",
   );
   assert.equal(admin.response.status, 401, "New owner dashboard must be private");
   assert.match(admin.response.headers.get("cache-control") || "", /no-store/);

@@ -9,9 +9,7 @@ A live, open-source countdown to Bitcoin block height **1,000,000**.
 - Live Bitcoin height, blocks remaining, and an estimated arrival time.
 - New blocks drop into an original isometric chain, with optional sound and reduced-motion support.
 - Focused watch mode and a block-drop preview to try the animation.
-- Bitcoin USD price history with 30-day, one-year and all-time views and linear/logarithmic scales.
 - Historical blocks 1, 10, 100, 1,000, 10,000 and 100,000 with dates, daily price and hashrate estimates.
-- Interactive historical growth charts, plus network hashrate, recent block intervals, difficulty estimates and transaction backlog.
 - An interactive issuance curve and halving boundaries up to block 1,000,000.
 - Community links and block-million party listings.
 
